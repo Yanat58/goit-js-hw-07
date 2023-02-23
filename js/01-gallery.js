@@ -1,13 +1,14 @@
-import { galleryItems } from './gallery-items.js';
+import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
 // console.log(galleryItems);
 
-const divRefClassGallery = document.querySelector('.gallery');
+const divRefClassGallery = document.querySelector(".gallery");
 
-
-const createGalleryImages = galleryItems.map(({preview, original, description}) =>  
-       `<div class="gallery__item">
+const createGalleryImages = galleryItems
+  .map(
+    ({ preview, original, description }) =>
+      `<div class="gallery__item">
   <a class="gallery__link" href="${original}">
     <img
       class="gallery__image"
@@ -17,20 +18,30 @@ const createGalleryImages = galleryItems.map(({preview, original, description}) 
     />
   </a>
 </div> `
-    ).join('');
+  )
+  .join("");
 
-  // console.log(createGalleryImages);  
-  divRefClassGallery.insertAdjacentHTML("beforeend", createGalleryImages);
+// console.log(createGalleryImages);
+divRefClassGallery.insertAdjacentHTML("beforeend", createGalleryImages);
 
-  divRefClassGallery.addEventListener('click', onLinkClick);
+divRefClassGallery.addEventListener("click", onImageClick);
 
-  function onLinkClick (event) {
-    
-    event.preventDefault();
-    if(!event.target.classList.contains("gallery__image")){
-      return;
-    } 
+function onImageClick(event) {
+  event.preventDefault();
+  if (!event.target.classList.contains("gallery__image")) {
+    return;
+  }
 
-      console.log(event.target)
-    
-  };
+  const instance = basicLightbox.create(`
+    <img src="${event.target.dataset.source}" width="800" height="600">
+`);
+  instance.show();
+
+document.addEventListener("keydown", onImageClose);
+
+function onImageClose(event) {
+  if (event.code === "Escape") {
+    instance.close();
+  }
+}
+}
